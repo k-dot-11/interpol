@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { trackedInvoke } from "@/lib/tauri"
+import { useSaveFile } from "@/service/file-management-service"
 import {
     defaultValueCtx,
     Editor,
@@ -79,6 +80,7 @@ const EditorWithControls = ({ filename }: { filename: string }) => {
 const EditorControls = ({ filename }: { filename: string }) => {
     // ✅ This will now correctly transition to false once the master provider hooks the instances
     const [editorLoading, getInstance] = useInstance()
+    const saveFileMutation = useSaveFile()
 
     const handleSave = async () => {
         if (editorLoading) return
@@ -89,15 +91,7 @@ const EditorControls = ({ filename }: { filename: string }) => {
         // Action fetches markdown tree string natively
         const content = editor.action(getMarkdown())
 
-        try {
-            await trackedInvoke<string>("save_note", {
-                filename: filename,
-                content: content,
-            })
-            console.log("File saved successfully!")
-        } catch (err) {
-            console.error("Failed to save file:", err)
-        }
+        saveFileMutation.mutate({ filename: filename, content: content })
     }
 
     return (
