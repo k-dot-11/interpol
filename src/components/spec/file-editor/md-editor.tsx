@@ -8,20 +8,54 @@ import {
     rootCtx,
 } from "@milkdown/kit/core"
 import { commonmark, headingAttr } from "@milkdown/kit/preset/commonmark"
-import {
-    Milkdown,
-    MilkdownProvider,
-    useEditor,
-    useInstance,
-} from "@milkdown/react"
+import { Milkdown, useEditor, useInstance } from "@milkdown/react"
 import { getMarkdown } from "@milkdown/utils"
 import { useEffect, useState } from "react"
+import { $shortcut } from "@milkdown/utils"
 
 const EditorWithControls = ({ filename }: { filename: string }) => {
     const [error, setError] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [fileContents, setFileContents] = useState<string>("")
 
+    // 1. Setup the save filesystem mutation
+    const saveFileMutation = useSaveFile()
+
+    // 2. Setup Milkdown instance control to query the canvas via the save button
+    const [editorLoading, getInstance] = useInstance()
+
+    // 3. Define the keymap shortcut to handle "Mod-s" directly inside the engine
+    const customKeymap = $shortcut((ctx) => ({
+        "Mod-s": () => {
+            const content = getMarkdown()(ctx)
+            saveFileMutation.mutate({ filename, content })
+            return true // Prevent default browser save event
+        },
+    }))
+
+    // 4. Initialize and control the Milkdown canvas instance life-cycle
+    useEditor(
+        (root) => {
+            if (!fileContents && isLoading) return // Don't build if data hasn't arrived
+
+            return Editor.make()
+                .config((ctx) => {
+                    ctx.set(rootCtx, root)
+                    ctx.set(defaultValueCtx, fileContents)
+                    ctx.set(editorViewOptionsCtx, {})
+                    ctx.set(headingAttr.key, (node) => {
+                        return {
+                            class: `milkdown-heading h${node.attrs.level}`,
+                        }
+                    })
+                })
+                .use(commonmark)
+                .use(customKeymap)
+        },
+        [fileContents, isLoading] // Re-initializes smoothly when file updates
+    )
+
+    // 5. Fetch initial file contents via Tauri IPC bridge
     useEffect(() => {
         if (!filename) return
 
@@ -49,82 +83,43 @@ const EditorWithControls = ({ filename }: { filename: string }) => {
         loadAndInitialize()
     }, [filename])
 
-    return (
-        // ✅ Single, master provider for this layout module
-        <MilkdownProvider>
-            <div className="p-6">
-                <div className="flex justify-between pb-6">
-                    <p className="text-3xl">{filename}</p>
-                    {/* Controls sit side-by-side with editor elements */}
-                    <EditorControls filename={filename} />
-                </div>
-
-                {isLoading && (
-                    <div className="mb-4 animate-pulse">
-                        Loading file contents...
-                    </div>
-                )}
-                {error && (
-                    <div className="mb-4 text-red-500">Error: {error}</div>
-                )}
-
-                {/* ✅ Render the editor element under the same provider layout */}
-                {!isLoading && !error && (
-                    <MilkdownEditor defaultValue={fileContents} />
-                )}
-            </div>
-        </MilkdownProvider>
-    )
-}
-
-const EditorControls = ({ filename }: { filename: string }) => {
-    // ✅ This will now correctly transition to false once the master provider hooks the instances
-    const [editorLoading, getInstance] = useInstance()
-    const saveFileMutation = useSaveFile()
-
-    const handleSave = async () => {
+    // 6. Handle click trigger interaction on the visual UI button
+    const handleSaveButtonClick = () => {
         if (editorLoading) return
-
         const editor = getInstance()
         if (!editor) return
 
-        // Action fetches markdown tree string natively
         const content = editor.action(getMarkdown())
-
-        saveFileMutation.mutate({ filename: filename, content: content })
+        saveFileMutation.mutate({ filename, content })
     }
 
     return (
-        <Button disabled={editorLoading} onClick={handleSave}>
-            {editorLoading ? "Loading..." : "Save"}
-        </Button>
+        <div className="min-h-full p-6">
+            <div className="flex justify-between pb-6">
+                <p className="text-3xl">{filename}</p>
+
+                <Button
+                    disabled={
+                        editorLoading || saveFileMutation.isPending || isLoading
+                    }
+                    onClick={handleSaveButtonClick}
+                >
+                    {editorLoading || saveFileMutation.isPending
+                        ? "Saving..."
+                        : "Save"}
+                </Button>
+            </div>
+
+            {isLoading && (
+                <div className="mb-4 animate-pulse">
+                    Loading file contents...
+                </div>
+            )}
+            {error && <div className="mb-4 text-red-500">Error: {error}</div>}
+
+            {!isLoading && !error && <Milkdown />}
+        </div>
     )
-}
-
-// Keep the core canvas simple and pass down data directly
-const MilkdownEditor = ({ defaultValue }: { defaultValue: string }) => {
-    useEditor(
-        (root) => {
-            return (
-                Editor.make()
-                    .config((ctx) => {
-                        ctx.set(rootCtx, root)
-                        ctx.set(defaultValueCtx, defaultValue)
-                        ctx.set(editorViewOptionsCtx, {})
-                        ctx.set(headingAttr.key, (node) => {
-                            return {
-                                class: `milkdown-heading h${node.attrs.level}`,
-                            }
-                        })
-                    })
-                    // .config(nord)
-                    .use(commonmark)
-            )
-        },
-        [defaultValue]
-    ) // Added dependency to allow re-initialization if file changes
-
-    return <Milkdown />
 }
 
 export default EditorWithControls

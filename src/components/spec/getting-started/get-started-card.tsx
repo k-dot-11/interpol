@@ -14,16 +14,20 @@ import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import { useFetchFiles, useSaveFile } from "@/service/file-management-service"
-import { Plus } from "lucide-react"
+import {
+    useDeleteFileMutation as useDeleteFile,
+    useFetchFiles,
+    useSaveFile,
+} from "@/service/file-management-service"
+import { Plus, Trash } from "lucide-react"
 import { useState } from "react"
-import { Link, useNavigate } from "react-router"
+import { Link } from "react-router"
 
 const GetStartedCard = () => {
-    const navigate = useNavigate()
-    const { data: filenames, refetch } = useFetchFiles()
+    const { data: filenames, refetch, isFetching } = useFetchFiles()
     const [newFilename, setNewFilename] = useState<string>("interpol document")
     const saveFileMutation = useSaveFile()
+    const deleteFileMutation = useDeleteFile()
 
     const handleCreateNewFile = async () => {
         await saveFileMutation.mutateAsync({
@@ -33,8 +37,11 @@ const GetStartedCard = () => {
         refetch()
     }
 
-    const navigateToFileEditor = (filename: string) => {
-        navigate(`/file-editor/${filename}`)
+    const deleteFile = async (filename: string) => {
+        await deleteFileMutation.mutateAsync({
+            filename: filename,
+        })
+        refetch()
     }
 
     return (
@@ -85,7 +92,10 @@ const GetStartedCard = () => {
             <CardContent>
                 <p className="text-lg">Your files</p>
                 <Separator className="my-4" />
-                {/*{isFetching && !filenames && <p>Loading</p>}*/}
+                {isFetching && !filenames && <p>Loading...</p>}
+                {filenames?.length === 0 && (
+                    <p className="text-center text-gray-400">No files found</p>
+                )}
                 {filenames?.map((item) => {
                     return (
                         <div
@@ -96,11 +106,12 @@ const GetStartedCard = () => {
                                 <p>{item}</p>
                             </Link>
                             <Button
-                                variant="link"
-                                className="cursor-pointer"
-                                onClick={() => navigateToFileEditor(item)}
+                                variant="ghost"
+                                className="cursor-pointer text-destructive"
+                                size="icon-sm"
+                                onClick={() => deleteFile(item)}
                             >
-                                Open
+                                <Trash />
                             </Button>
                         </div>
                     )

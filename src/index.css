@@ -2,13 +2,13 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
-@import "@fontsource-variable/outfit";
+@import "@fontsource-variable/outfit"; /* Updated font source import for Hanken Grotesk */
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: "Outfit Variable", sans-serif;
+    --font-heading: "Hanken Grotesk", sans-serif;
+    --font-sans: "Hanken Grotesk", sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -40,82 +40,90 @@
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-3xl: 2rem;
+    --radius-4xl: 2.5rem;
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.148 0.004 228.8);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.148 0.004 228.8);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.148 0.004 228.8);
-    --primary: oklch(0.52 0.105 223.128);
-    --primary-foreground: oklch(0.984 0.019 200.873);
-    --secondary: oklch(0.967 0.001 286.375);
-    --secondary-foreground: oklch(0.21 0.006 285.885);
-    --muted: oklch(0.963 0.002 197.1);
-    --muted-foreground: oklch(0.56 0.021 213.5);
-    --accent: oklch(0.963 0.002 197.1);
-    --accent-foreground: oklch(0.218 0.008 223.9);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.925 0.005 214.3);
-    --input: oklch(0.925 0.005 214.3);
-    --ring: oklch(0.723 0.014 214.4);
-    --chart-1: oklch(0.872 0.007 219.6);
-    --chart-2: oklch(0.56 0.021 213.5);
-    --chart-3: oklch(0.45 0.017 213.2);
-    --chart-4: oklch(0.378 0.015 216);
-    --chart-5: oklch(0.275 0.011 216.9);
-    --radius: 0.45rem;
-    --sidebar: oklch(0.987 0.002 197.1);
-    --sidebar-foreground: oklch(0.148 0.004 228.8);
-    --sidebar-primary: oklch(0.609 0.126 221.723);
-    --sidebar-primary-foreground: oklch(0.984 0.019 200.873);
-    --sidebar-accent: oklch(0.963 0.002 197.1);
-    --sidebar-accent-foreground: oklch(0.218 0.008 223.9);
-    --sidebar-border: oklch(0.925 0.005 214.3);
-    --sidebar-ring: oklch(0.723 0.014 214.4);
+    /* Primary deep dark background & typography */
+    --background: #121212;
+    --foreground: #ffffff;
+
+    /* Level 1 Surface Tiers (Cards, Popovers, Sidebars) */
+    --card: #181818;
+    --card-foreground: #ffffff;
+    --popover: #181818;
+    --popover-foreground: #ffffff;
+    --sidebar: #181818;
+    --sidebar-foreground: #b3b3b3;
+
+    /* Brand Accent: Signal Green */
+    --primary: #1db954;
+    --primary-foreground: #000000;
+
+    /* Secondary & Muted Tiers (Level 2 Interactivity Surfaces) */
+    --secondary: #282828;
+    --secondary-foreground: #ffffff;
+    --muted: #282828;
+    --muted-foreground: #b3b3b3;
+    --accent: #282828;
+    --accent-foreground: #ffffff;
+
+    /* High priority border indicators over dark surfaces */
+    --border: #3e3e3e;
+    --input: #282828;
+    --ring: #1db954;
+
+    /* Error styling states */
+    --destructive: #93000a;
+    --destructive-foreground: #ffdad6;
+
+    --sidebar-primary: #1db954;
+    --sidebar-primary-foreground: #000000;
+    --sidebar-accent: #282828;
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: #3e3e3e;
+    --sidebar-ring: #1db954;
+
+    --radius: 0.5rem;
 }
 
 .dark {
-    --background: oklch(0.148 0.004 228.8);
-    --foreground: oklch(0.987 0.002 197.1);
-    --card: oklch(0.218 0.008 223.9);
-    --card-foreground: oklch(0.987 0.002 197.1);
-    --popover: oklch(0.218 0.008 223.9);
-    --popover-foreground: oklch(0.987 0.002 197.1);
-    --primary: oklch(0.45 0.085 224.283);
-    --primary-foreground: oklch(0.984 0.019 200.873);
-    --secondary: oklch(0.274 0.006 286.033);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.275 0.011 216.9);
-    --muted-foreground: oklch(0.723 0.014 214.4);
-    --accent: oklch(0.275 0.011 216.9);
-    --accent-foreground: oklch(0.987 0.002 197.1);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.56 0.021 213.5);
-    --chart-1: oklch(0.872 0.007 219.6);
-    --chart-2: oklch(0.56 0.021 213.5);
-    --chart-3: oklch(0.45 0.017 213.2);
-    --chart-4: oklch(0.378 0.015 216);
-    --chart-5: oklch(0.275 0.011 216.9);
-    --sidebar: oklch(0.218 0.008 223.9);
-    --sidebar-foreground: oklch(0.987 0.002 197.1);
-    --sidebar-primary: oklch(0.715 0.143 215.221);
-    --sidebar-primary-foreground: oklch(0.302 0.056 229.695);
-    --sidebar-accent: oklch(0.275 0.011 216.9);
-    --sidebar-accent-foreground: oklch(0.987 0.002 197.1);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.56 0.021 213.5);
+    /* Maintained structural dark-first values for system sync uniformity */
+    --background: #0e0e0e; /* Container Lowest Variant */
+    --foreground: #e4e2e1;
+    --card: #131313;
+    --card-foreground: #e4e2e1;
+    --popover: #1b1c1c;
+    --popover-foreground: #e4e2e1;
+    --sidebar: #131313;
+    --sidebar-foreground: #bccbb9;
+
+    --primary: #53e076;
+    --primary-foreground: #003914;
+
+    --secondary: #4a4949;
+    --secondary-foreground: #e5e2e1;
+    --muted: #1f2020;
+    --muted-foreground: #bccbb9;
+    --accent: #2a2a2a;
+    --accent-foreground: #e4e2e1;
+
+    --border: #3d4a3d;
+    --input: #2a2a2a;
+    --ring: #53e076;
+
+    --sidebar-primary: #53e076;
+    --sidebar-primary-foreground: #003914;
+    --sidebar-accent: #2a2a2a;
+    --sidebar-accent-foreground: #e4e2e1;
+    --sidebar-border: #3d4a3d;
+    --sidebar-ring: #53e076;
 }
 
 @layer base {
@@ -178,14 +186,17 @@ body {
 }
 
 /* ==========================================================================
-   💎 UPDATED SHADCN ELEMENT MATCHES FOR MILKDOWN EDITOR
+    💎 UPDATED SHADCN ELEMENT MATCHES FOR MILKDOWN EDITOR
    ========================================================================== */
 
 /* Outer structure removal */
 .milkdown {
     background-color: transparent !important;
     box-shadow: none !important;
-    border: none !important;
+    border: 1px solid var(--border);
+    height: 100%;
+    border-radius: 16px;
+    padding: 1rem;
 }
 
 /* Clean slate core layout wrapper */
@@ -193,56 +204,63 @@ body {
     padding: 0 !important;
     font-family: inherit !important;
     color: var(--foreground) !important;
-    line-height: 1.75 !important;
+    line-height: 1.5 !important; /* Adjusted to match design spec 1.5x height */
+    height: 100%;
 }
 
 .milkdown .editor {
     outline: none !important;
     background-color: transparent !important;
+    height: 100%;
 }
 
 /* Match Shadcn primary accent color for active dragging and cursor selection loops */
 .ProseMirror ::selection {
     background-color: rgba(var(--primary), 0.2) !important;
-    background: color-mix(in oklch, var(--primary) 25%, transparent) !important;
+    background: color-mix(in srgb, var(--primary) 25%, transparent) !important;
 }
 
-/* Headings structure to use font-sans layout and match Shadcn text scale defaults */
+/* Headings structure matching the "Display" mindset: tight spacing, heavy weights */
 .ProseMirror h1,
 .ProseMirror h2,
 .ProseMirror h3,
 .ProseMirror h4 {
-    font-family: var(--font-sans) !important;
-    font-weight: 600 !important;
-    color: var(--foreground) !important;
-    letter-spacing: -0.025em;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
+    font-family: var(--font-heading) !important;
+    color: #ffffff !important; /* Pure white reserved for headers */
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
 }
 
 .ProseMirror h1 {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
+    font-size: 48px;
+    font-weight: 800 !important;
+    line-height: 56px !important;
+    letter-spacing: -0.02em !important;
 }
 .ProseMirror h2 {
-    font-size: 1.5rem;
-    line-height: 2rem;
+    font-size: 32px;
+    font-weight: 700 !important;
+    line-height: 40px !important;
+    letter-spacing: -0.01em !important;
     border-bottom: 1px solid var(--border);
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.5rem;
 }
 .ProseMirror h3 {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+    font-size: 24px;
+    font-weight: 700 !important;
+    line-height: 32px !important;
 }
 .ProseMirror h4 {
-    font-size: 1.125rem;
-    line-height: 1.5rem;
+    font-size: 18px;
+    font-weight: 600 !important;
+    line-height: 24px !important;
 }
 
-/* Paragraph & text alignments */
+/* Paragraph & softened copy values */
 .ProseMirror p {
+    color: #b3b3b3 !important; /* Softened grey for comfortable reading body layers */
+    font-size: 16px;
     margin-bottom: 1rem;
-    color: color-mix(in oklch, var(--foreground) 90%, var(--background));
 }
 
 /* Inline Code Elements matching Shadcn badges */
@@ -251,13 +269,13 @@ body {
     color: var(--foreground) !important;
     padding: 0.2rem 0.4rem !important;
     font-size: 0.875rem !important;
-    border-radius: var(--radius-sm) !important;
+    border-radius: 4px !important; /* Specific 4px rounded highlight rule */
     font-family: monospace !important;
 }
 
 /* Code Blocks wrapper structural styling to mirror custom dark/light cards */
 .ProseMirror pre {
-    background-color: var(--muted) !important;
+    background-color: var(--card) !important;
     border: 1px solid var(--border) !important;
     border-radius: var(--radius-md) !important;
     padding: 1rem !important;
@@ -269,17 +287,17 @@ body {
     background-color: transparent !important;
     padding: 0 !important;
     border-radius: 0 !important;
-    color: var(--foreground) !important;
+    color: #ffffff !important;
     font-size: 0.875rem !important;
 }
 
 /* Blockquotes inside system views */
 .ProseMirror blockquote {
     border-left: 4px solid var(--primary) !important;
-    padding-left: 1rem !important;
+    padding-left: 1.25rem !important;
     font-style: italic !important;
     color: var(--muted-foreground) !important;
-    margin: 1rem 0 !important;
+    margin: 1.5rem 0 !important;
 }
 
 /* Lists layout alignment matches */
@@ -294,7 +312,14 @@ body {
     margin-bottom: 1rem;
 }
 .ProseMirror li {
-    margin-bottom: 0.25rem;
+    color: #b3b3b3;
+    margin-bottom: 0.35rem;
+    transition: color 0.2s ease;
+}
+
+/* Hover effects for lists from the design spec */
+.ProseMirror li:hover {
+    color: #ffffff !important;
 }
 
 /* Links matching Shadcn interactive typography accent */
@@ -302,12 +327,12 @@ body {
     color: var(--primary) !important;
     text-decoration: underline !important;
     text-underline-offset: 4px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /* Horizontal lines */
 .ProseMirror hr {
     border: 0;
     border-top: 1px solid var(--border) !important;
-    margin: 2rem 0 !important;
+    margin: 2.5rem 0 !important;
 }

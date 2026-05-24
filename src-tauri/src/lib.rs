@@ -66,6 +66,14 @@ fn load_file_contents(app: AppHandle, filename: String) -> Result<String, String
     Ok(contents)
 }
 
+#[tauri::command]
+fn delete_file(app: AppHandle, filename: String) -> Result<(), String> {
+    let docs_dir = app.path().document_dir().map_err(|err| err.to_string())?;
+    let file_path = docs_dir.join("Interpol").join(filename);
+    fs::remove_file(file_path).map_err(|err| err.to_string())?;
+    Ok(())
+}
+
 fn external_navigation_plugin<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
     tauri::plugin::Builder::<R>::new("external-navigation")
         .on_navigation(|webview, url| {
@@ -113,7 +121,8 @@ pub fn run() {
             greet,
             save_note,
             load_file_contents,
-            list_notes
+            list_notes,
+            delete_file
         ])
         .on_page_load(|webview, payload| {
             if webview.label() == "main" && matches!(payload.event(), PageLoadEvent::Finished) {
