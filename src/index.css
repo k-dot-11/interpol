@@ -177,15 +177,137 @@ body {
     }
 }
 
-.crepe .milkdown {
-    --crepe-color-background: #fdfcff;
-    --crepe-color-on-background: #1b1c1d;
-    --crepe-color-surface: #f8f9ff;
-    --crepe-color-surface-low: #f2f3fa;
+/* ==========================================================================
+   💎 UPDATED SHADCN ELEMENT MATCHES FOR MILKDOWN EDITOR
+   ========================================================================== */
+
+/* Outer structure removal */
+.milkdown {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
 }
-.dark .crepe .milkdown {
-    --crepe-color-background: #1b1c1d;
-    --crepe-color-on-background: #f8f9ff;
-    --crepe-color-surface: #111418;
-    --crepe-color-surface-low: #191c20;
+
+/* Clean slate core layout wrapper */
+.ProseMirror {
+    padding: 0 !important;
+    font-family: inherit !important;
+    color: var(--foreground) !important;
+    line-height: 1.75 !important;
+}
+
+.milkdown .editor {
+    outline: none !important;
+    background-color: transparent !important;
+}
+
+/* Match Shadcn primary accent color for active dragging and cursor selection loops */
+.ProseMirror ::selection {
+    background-color: rgba(var(--primary), 0.2) !important;
+    background: color-mix(in oklch, var(--primary) 25%, transparent) !important;
+}
+
+/* Headings structure to use font-sans layout and match Shadcn text scale defaults */
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4 {
+    font-family: var(--font-sans) !important;
+    font-weight: 600 !important;
+    color: var(--foreground) !important;
+    letter-spacing: -0.025em;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.ProseMirror h1 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+.ProseMirror h2 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.25rem;
+}
+.ProseMirror h3 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+.ProseMirror h4 {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+}
+
+/* Paragraph & text alignments */
+.ProseMirror p {
+    margin-bottom: 1rem;
+    color: color-mix(in oklch, var(--foreground) 90%, var(--background));
+}
+
+/* Inline Code Elements matching Shadcn badges */
+.ProseMirror code:not(pre code) {
+    background-color: var(--muted) !important;
+    color: var(--foreground) !important;
+    padding: 0.2rem 0.4rem !important;
+    font-size: 0.875rem !important;
+    border-radius: var(--radius-sm) !important;
+    font-family: monospace !important;
+}
+
+/* Code Blocks wrapper structural styling to mirror custom dark/light cards */
+.ProseMirror pre {
+    background-color: var(--muted) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 1rem !important;
+    margin: 1rem 0 !important;
+    overflow-x: auto;
+}
+
+.ProseMirror pre code {
+    background-color: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    color: var(--foreground) !important;
+    font-size: 0.875rem !important;
+}
+
+/* Blockquotes inside system views */
+.ProseMirror blockquote {
+    border-left: 4px solid var(--primary) !important;
+    padding-left: 1rem !important;
+    font-style: italic !important;
+    color: var(--muted-foreground) !important;
+    margin: 1rem 0 !important;
+}
+
+/* Lists layout alignment matches */
+.ProseMirror ul {
+    list-style-type: disc !important;
+    padding-left: 1.5rem !important;
+    margin-bottom: 1rem;
+}
+.ProseMirror ol {
+    list-style-type: decimal !important;
+    padding-left: 1.5rem !important;
+    margin-bottom: 1rem;
+}
+.ProseMirror li {
+    margin-bottom: 0.25rem;
+}
+
+/* Links matching Shadcn interactive typography accent */
+.ProseMirror a {
+    color: var(--primary) !important;
+    text-decoration: underline !important;
+    text-underline-offset: 4px;
+    font-weight: 500;
+}
+
+/* Horizontal lines */
+.ProseMirror hr {
+    border: 0;
+    border-top: 1px solid var(--border) !important;
+    margin: 2rem 0 !important;
 }
